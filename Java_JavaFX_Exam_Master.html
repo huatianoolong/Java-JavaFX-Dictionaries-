@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java + JavaFX — Complete Exam Master</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,500&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f1e8; --paper-2:#e8e3d6; --ink:#222420; --ink-soft:#4c4d43; --ink-faint:#82806e;
+    --rule:#d3cdb9; --accent:#1f5d6e; --accent-2:#c07a3a;
+    --code-bg:#1b2024; --code-fg:#e8e6da;
+    --c-comment:#7e8b82; --c-key:#79bccb; --c-type:#e0b25f; --c-str:#a7c080; --c-num:#e08a5f; --c-anno:#d98b6f;
+    --shadow:0 1px 2px rgba(34,36,18,.06), 0 12px 34px rgba(34,36,18,.10);
+    --maxw:800px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:radial-gradient(circle at 16% -10%,#fbf8ef 0%,rgba(251,248,239,0) 42%),var(--paper);
+    color:var(--ink);font-family:"Spectral",Georgia,serif;font-size:18px;line-height:1.66;-webkit-font-smoothing:antialiased;}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");}
+  .wrap{position:relative;z-index:1;max-width:1220px;margin:0 auto;padding:0 28px;display:grid;grid-template-columns:262px 1fr;gap:48px;}
+
+  header.masthead{grid-column:1 / -1;padding:56px 0 22px;border-bottom:2px solid var(--ink);}
+  .kicker{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent-2);margin:0 0 13px;}
+  h1.title{font-family:"Fraunces",serif;font-weight:800;font-size:clamp(2.3rem,5.2vw,3.8rem);line-height:.98;letter-spacing:-.01em;margin:0;}
+  h1.title em{font-style:italic;font-weight:500;color:var(--accent);}
+  .subtitle{font-family:"Spectral",serif;font-style:italic;font-size:1.14rem;color:var(--ink-soft);margin:14px 0 0;max-width:66ch;}
+  .meta{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:20px;display:flex;gap:20px;flex-wrap:wrap;}
+  .meta b{color:var(--accent);font-weight:700;}
+
+  .toolbar{grid-column:1 / -1;position:sticky;top:0;z-index:4;background:linear-gradient(var(--paper) 78%,rgba(244,241,232,0));padding:14px 0 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
+  .search{flex:1;min-width:220px;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:9px 14px;box-shadow:var(--shadow);}
+  .search input{border:none;outline:none;background:none;font-family:"JetBrains Mono",monospace;font-size:.86rem;color:var(--ink);width:100%;}
+  .btn{font-family:"JetBrains Mono",monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--accent);background:none;color:var(--accent);padding:9px 14px;border-radius:10px;cursor:pointer;transition:.15s;}
+  .btn:hover{background:var(--accent);color:#fff;}
+  .count{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--ink-faint);}
+
+  nav.toc{position:sticky;top:74px;align-self:start;height:max-content;font-family:"JetBrains Mono",monospace;font-size:.74rem;max-height:calc(100vh - 90px);overflow-y:auto;}
+  nav.toc .toc-head{letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);font-size:.62rem;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule);}
+  nav.toc .grp{margin-top:12px;margin-bottom:3px;color:var(--accent-2);font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;}
+  nav.toc a{display:flex;justify-content:space-between;gap:8px;color:var(--ink-soft);text-decoration:none;padding:3.5px 0 3.5px 11px;border-left:2px solid transparent;line-height:1.28;transition:.16s;}
+  nav.toc a .n{color:var(--ink-faint);}
+  nav.toc a:hover{color:var(--accent);}
+  nav.toc a.active{color:var(--accent);border-left-color:var(--accent);font-weight:700;}
+
+  main{max-width:var(--maxw);min-width:0;padding-bottom:120px;}
+  .part{padding-top:30px;margin-top:34px;border-top:2px solid var(--ink);}
+  .part:first-child{border-top:none;margin-top:6px;}
+  .part-label{font-family:"JetBrains Mono",monospace;font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:var(--accent-2);font-weight:700;}
+  .part h2{font-family:"Fraunces",serif;font-weight:800;font-size:2rem;line-height:1.04;letter-spacing:-.01em;margin:.05em 0 .5em;}
+
+  details.card{border:1px solid var(--rule);border-radius:11px;margin:9px 0;background:#fcfaf2;overflow:hidden;box-shadow:0 1px 2px rgba(34,36,18,.04);scroll-margin-top:80px;}
+  details.card[open]{box-shadow:var(--shadow);}
+  details.card > summary{cursor:pointer;list-style:none;padding:12px 16px;display:flex;align-items:baseline;gap:11px;}
+  details.card > summary::-webkit-details-marker{display:none;}
+  details.card > summary::before{content:"▸";color:var(--accent);font-size:.78rem;transition:transform .18s;flex:none;transform:translateY(-1px);}
+  details.card[open] > summary::before{transform:rotate(90deg) translateX(-1px);}
+  .cname{font-family:"Fraunces",serif;font-weight:700;font-size:1.03rem;color:var(--ink);flex:none;}
+  .cpurpose{color:var(--ink-soft);font-size:.91rem;}
+  details.card[open] > summary{border-bottom:1px solid var(--rule);background:var(--paper-2);}
+  .cbody{padding:15px 17px 6px;}
+  h3{font-family:"Fraunces",serif;font-weight:600;font-size:1.06rem;margin:1.25em 0 .35em;color:var(--accent);}
+  h3:first-child{margin-top:.2em;}
+  p{margin:0 0 .85em;}
+  strong{font-weight:600;color:#171814;}
+  code.tok{font-family:"JetBrains Mono",monospace;font-size:.84em;background:var(--paper-2);border:1px solid var(--rule);border-radius:5px;padding:.04em .36em;color:#35332a;white-space:nowrap;}
+
+  pre{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:15px 17px;overflow-x:auto;font-family:"JetBrains Mono",monospace;font-size:.795rem;line-height:1.56;margin:.55em 0 1em;border:1px solid #000;}
+  pre code{font-family:inherit;white-space:pre;}
+  .tok-comment{color:var(--c-comment);font-style:italic;}.tok-key{color:var(--c-key);}.tok-type{color:var(--c-type);}
+  .tok-str{color:var(--c-str);}.tok-num{color:var(--c-num);}.tok-anno{color:var(--c-anno);}
+
+  .note{border-left:3px solid var(--accent);background:rgba(31,93,110,.07);padding:12px 16px;border-radius:0 10px 10px 0;margin:1em 0;font-size:.92rem;}
+  .warn{border-left:3px solid var(--accent-2);background:rgba(192,122,58,.10);padding:12px 16px;border-radius:0 10px 10px 0;margin:1em 0;font-size:.92rem;}
+  .exam{border-left:3px solid #9a3b3b;background:rgba(154,59,59,.08);padding:12px 16px;border-radius:0 10px 10px 0;margin:1em 0;font-size:.92rem;}
+  .do{border-left:3px solid #4a7d52;background:rgba(74,125,82,.09);padding:12px 16px;border-radius:0 10px 10px 0;margin:1em 0;font-size:.92rem;}
+  .note .tag,.warn .tag,.exam .tag,.do .tag{font-family:"JetBrains Mono",monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:4px;font-weight:700;}
+  .note .tag{color:var(--accent);}.warn .tag{color:var(--accent-2);}.exam .tag{color:#9a3b3b;}.do .tag{color:#4a7d52;}
+
+  ul,ol{margin:0 0 .85em;padding-left:1.25em;}li{margin:.24em 0;}li::marker{color:var(--accent-2);}
+
+  .tbl{margin:1em 0;border:1px solid var(--rule);border-radius:11px;overflow:hidden;box-shadow:var(--shadow);}
+  table{border-collapse:collapse;width:100%;font-size:.84rem;}
+  th,td{text-align:left;padding:9px 13px;border-bottom:1px solid var(--rule);vertical-align:top;}
+  th{background:var(--paper-2);font-family:"JetBrains Mono",monospace;font-size:.61rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
+  tr:last-child td{border-bottom:none;}
+  td code{font-family:"JetBrains Mono",monospace;font-size:.85em;color:var(--accent);background:none;}
+  td.d code{color:#35332a;}
+
+  section.hidden,details.card.hidden{display:none;}
+  footer{grid-column:1 / -1;border-top:2px solid var(--ink);margin-top:36px;padding:24px 0 80px;font-family:"JetBrains Mono",monospace;font-size:.7rem;letter-spacing:.1em;color:var(--ink-faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .toTop{position:fixed;bottom:24px;right:24px;z-index:5;background:var(--accent);color:#fff;border:none;width:46px;height:46px;border-radius:50%;font-size:1.2rem;cursor:pointer;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;font-family:serif;}
+  .toTop.show{opacity:1;pointer-events:auto;}.toTop:hover{background:#184a58;}
+
+  @media (max-width:940px){.wrap{grid-template-columns:1fr;gap:0;}nav.toc{position:static;border:1px solid var(--rule);border-radius:11px;padding:14px 16px;margin-bottom:8px;background:var(--paper-2);max-height:none;}main{max-width:none;}}
+  @media print{nav.toc,.toTop,.toolbar,body::before{display:none;}.wrap{display:block;}details.card{break-inside:avoid;}details.card>.cbody{display:block!important;}body{font-size:10.5pt;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="kicker">Java SE + JavaFX 21 · Complete Exam Master</p>
+    <h1 class="title">Java &amp; <em>JavaFX</em> — All-in-One</h1>
+    <p class="subtitle">Six topics in one searchable book: OOP foundation, advanced OOP, JavaFX basics, exception handling, text I/O, and JavaFX events &amp; binding. Each card teaches what the thing is, shows code, and lists what you can actually do with it. Search it, expand only what you're revising.</p>
+    <div class="meta"><span>📘 <b>Exam master</b></span><span><b>6 parts</b> · 46 topics</span><span><b>green box</b> = what you can do</span><span><b>red box</b> = exam trap</span></div>
+  </header>
+
+  <div class="toolbar">
+    <label class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f5d6e" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      <input type="text" id="search" placeholder="Search... e.g. polymorphism, binding, finally, event filter, BufferedReader">
+    </label>
+    <button class="btn" id="expandAll">Expand all</button>
+    <button class="btn" id="collapseAll">Collapse all</button>
+    <span class="count" id="count"></span>
+  </div>
+
+  <nav class="toc" id="toc">
+    <div class="toc-head">Contents</div>
+    <div class="grp">I · OOP Foundation</div>
+    <a href="#c01"><span>Classes, objects &amp; refs</span><span class="n">01</span></a>
+    <a href="#c02"><span>Encapsulation &amp; access</span><span class="n">02</span></a>
+    <a href="#c03"><span>Constructors &amp; this</span><span class="n">03</span></a>
+    <a href="#c04"><span>static &amp; final</span><span class="n">04</span></a>
+    <a href="#c05"><span>Inheritance &amp; super</span><span class="n">05</span></a>
+    <a href="#c06"><span>Overloading vs overriding</span><span class="n">06</span></a>
+    <a href="#c07"><span>Polymorphism</span><span class="n">07</span></a>
+    <a href="#c08"><span>The Object class</span><span class="n">08</span></a>
+    <div class="grp">II · Advanced OOP</div>
+    <a href="#c09"><span>Abstract classes</span><span class="n">09</span></a>
+    <a href="#c10"><span>Interfaces</span><span class="n">10</span></a>
+    <a href="#c11"><span>Abstract vs interface</span><span class="n">11</span></a>
+    <a href="#c12"><span>Composition vs inheritance</span><span class="n">12</span></a>
+    <a href="#c13"><span>Nested classes</span><span class="n">13</span></a>
+    <a href="#c14"><span>Enums</span><span class="n">14</span></a>
+    <a href="#c15"><span>Generics</span><span class="n">15</span></a>
+    <a href="#c16"><span>Records &amp; sealed</span><span class="n">16</span></a>
+    <a href="#c17"><span>equals/hashCode · ordering</span><span class="n">17</span></a>
+    <a href="#c18"><span>Immutability &amp; String</span><span class="n">18</span></a>
+    <a href="#c19"><span>Lambdas &amp; functional ifaces</span><span class="n">19</span></a>
+    <div class="grp">III · JavaFX Basics</div>
+    <a href="#c20"><span>Architecture overview</span><span class="n">20</span></a>
+    <a href="#c21"><span>Application lifecycle</span><span class="n">21</span></a>
+    <a href="#c22"><span>Scene graph &amp; Node</span><span class="n">22</span></a>
+    <a href="#c23"><span>Layout panes</span><span class="n">23</span></a>
+    <a href="#c24"><span>Controls overview</span><span class="n">24</span></a>
+    <a href="#c25"><span>FXML &amp; controllers</span><span class="n">25</span></a>
+    <a href="#c26"><span>Stage windows &amp; dialogs</span><span class="n">26</span></a>
+    <div class="grp">IV · Exceptions</div>
+    <a href="#c27"><span>Exception hierarchy</span><span class="n">27</span></a>
+    <a href="#c28"><span>try / catch / finally</span><span class="n">28</span></a>
+    <a href="#c29"><span>throw / throws · custom</span><span class="n">29</span></a>
+    <a href="#c30"><span>try-with-resources</span><span class="n">30</span></a>
+    <a href="#c31"><span>Common exceptions · rules</span><span class="n">31</span></a>
+    <div class="grp">V · Text I/O</div>
+    <a href="#c32"><span>Streams overview</span><span class="n">32</span></a>
+    <a href="#c33"><span>Console input</span><span class="n">33</span></a>
+    <a href="#c34"><span>Reading files</span><span class="n">34</span></a>
+    <a href="#c35"><span>Writing files</span><span class="n">35</span></a>
+    <a href="#c36"><span>NIO.2 Path &amp; Files</span><span class="n">36</span></a>
+    <a href="#c37"><span>Serialization</span><span class="n">37</span></a>
+    <div class="grp">VI · JavaFX Events &amp; Binding</div>
+    <a href="#c38"><span>Events &amp; event types</span><span class="n">38</span></a>
+    <a href="#c39"><span>Registering handlers</span><span class="n">39</span></a>
+    <a href="#c40"><span>Propagation &amp; consume</span><span class="n">40</span></a>
+    <a href="#c41"><span>Handler reference table</span><span class="n">41</span></a>
+    <a href="#c42"><span>Properties &amp; listeners</span><span class="n">42</span></a>
+    <a href="#c43"><span>Binding — full toolkit</span><span class="n">43</span></a>
+    <a href="#c44"><span>The Bindings class</span><span class="n">44</span></a>
+    <a href="#c45"><span>Observable collections</span><span class="n">45</span></a>
+    <a href="#c46"><span>Concurrency: Task</span><span class="n">46</span></a>
+  </nav>
+
+  <main>
+
+  <!-- ===== PART I ===== -->
+  <div class="part"><span class="part-label">Part I</span><h2>OOP Foundation</h2>
+
+    <details class="card" id="c01" data-kw="class object reference new field method instance pass by value"><summary><span class="cname">01 · Classes, objects &amp; references</span><span class="cpurpose">A class is a blueprint; an object is an instance; a variable holds a reference to it.</span></summary><div class="cbody">
+      <pre><code>public class Dog {
+    String name;            // field (state)
+    void bark(){ System.out.println(name + " woofs"); }  // method (behaviour)
+}
+Dog d = new Dog();          // 'new' builds the object; d holds a reference
+d.name = "Rex";  d.bark();</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Model real things as classes; create many independent objects from one class; pass objects to methods; store them in arrays/collections. A reference can be reassigned or set to <code class="tok">null</code> (no object).</div>
+      <div class="exam"><span class="tag">Exam trap — pass by value</span>Java is <strong>always</strong> pass-by-value. For an object, the <em>reference</em> is copied: a method <em>can</em> change the object's fields (visible to caller), but <em>reassigning</em> the parameter to a new object does <strong>not</strong> affect the caller's variable.</div>
+    </div></details>
+
+    <details class="card" id="c02" data-kw="encapsulation private getter setter access modifier public protected default package"><summary><span class="cname">02 · Encapsulation &amp; access modifiers</span><span class="cpurpose">Hide data, expose controlled access.</span></summary><div class="cbody">
+      <pre><code>public class Account {
+    private double balance;                      // hidden
+    public double getBalance(){ return balance; }
+    public void deposit(double a){ if (a&gt;0) balance += a; }  // validates
+}</code></pre>
+      <div class="tbl"><table>
+        <tr><th>Modifier</th><th>Class</th><th>Package</th><th>Subclass</th><th>World</th></tr>
+        <tr><td><code>private</code></td><td>✔</td><td>✘</td><td>✘</td><td>✘</td></tr>
+        <tr><td><code>(default)</code></td><td>✔</td><td>✔</td><td>✘</td><td>✘</td></tr>
+        <tr><td><code>protected</code></td><td>✔</td><td>✔</td><td>✔</td><td>✘</td></tr>
+        <tr><td><code>public</code></td><td>✔</td><td>✔</td><td>✔</td><td>✔</td></tr>
+      </table></div>
+      <div class="do"><span class="tag">What you can do</span>Make fields <code class="tok">private</code> + add getters/setters so you can validate, compute, log, or change internals later without breaking callers. Expose only what others need.</div>
+    </div></details>
+
+    <details class="card" id="c03" data-kw="constructor this overload chaining default parameterized init order"><summary><span class="cname">03 · Constructors &amp; this</span><span class="cpurpose">Initialise a new object.</span></summary><div class="cbody">
+      <pre><code>public class Point {
+    int x, y;
+    public Point(){ this(0,0); }              // chains to the other constructor
+    public Point(int x, int y){ this.x=x; this.y=y; }   // 'this' = current object
+}</code></pre>
+      <ul>
+        <li>Same name as class, <strong>no return type</strong>. If you write none, Java adds a default no-arg one; write any and that freebie vanishes.</li>
+        <li><strong>Overload</strong> constructors with different parameter lists. <code class="tok">this(...)</code> calls another (must be first statement).</li>
+        <li>Init order: static blocks (once) → instance fields/blocks → constructor body.</li>
+      </ul>
+      <div class="do"><span class="tag">What you can do</span>Offer several ways to build an object (full args, defaults), centralise setup with <code class="tok">this(...)</code> chaining, and guarantee an object is valid the moment it exists.</div>
+    </div></details>
+
+    <details class="card" id="c04" data-kw="static final constant class method block keyword shared"><summary><span class="cname">04 · static &amp; final</span><span class="cpurpose">static = belongs to the class; final = can't change/override.</span></summary><div class="cbody">
+      <pre><code>class Counter {
+    static int count = 0;               // ONE copy shared by all objects
+    final int id;                        // assigned once, then constant
+    static final double PI = 3.14159;    // a true constant
+    Counter(){ id = ++count; }
+    static int total(){ return count; }  // call as Counter.total()
+}</code></pre>
+      <div class="tbl"><table>
+        <tr><th>On</th><th class="d"><code>static</code></th><th class="d"><code>final</code></th></tr>
+        <tr><td>variable</td><td class="d">Shared class variable (one copy)</td><td class="d">Constant after assignment</td></tr>
+        <tr><td>method</td><td class="d">Called on class; no <code>this</code></td><td class="d">Can't be overridden</td></tr>
+        <tr><td>class</td><td class="d">(nested only)</td><td class="d">Can't be subclassed (e.g. String)</td></tr>
+      </table></div>
+      <div class="do"><span class="tag">What you can do</span>Use <code class="tok">static</code> for shared counters, factory/utility methods (<code class="tok">Math.max</code>), and constants. Use <code class="tok">final</code> to lock values, prevent overriding, and make immutable classes.</div>
+    </div></details>
+
+    <details class="card" id="c05" data-kw="inheritance extends super parent child base subclass is-a override constructor"><summary><span class="cname">05 · Inheritance &amp; super</span><span class="cpurpose">A subclass reuses + extends a superclass (IS-A).</span></summary><div class="cbody">
+      <pre><code>class Animal { String name; Animal(String n){ name=n; } void eat(){} }
+class Dog extends Animal {
+    Dog(String n){ super(n); }          // call parent ctor FIRST
+    @Override void eat(){ super.eat(); /* + extra */ }
+}</code></pre>
+      <ul>
+        <li>Single inheritance of classes; <code class="tok">super(...)</code> first statement (auto-inserted if omitted); <code class="tok">super.m()</code> calls parent's version.</li>
+        <li>Subclass inherits accessible members, can add new ones, can override methods.</li>
+      </ul>
+      <div class="do"><span class="tag">What you can do</span>Share common code in a base class; specialise in subclasses; treat subclasses uniformly through the parent type (sets up polymorphism, §07).</div>
+    </div></details>
+
+    <details class="card" id="c06" data-kw="overloading overriding compile runtime signature difference covariant"><summary><span class="cname">06 · Overloading vs overriding</span><span class="cpurpose">Same name/different params (compile-time) vs redefining a parent method (run-time).</span></summary><div class="cbody">
+      <div class="tbl"><table>
+        <tr><th></th><th>Overloading</th><th>Overriding</th></tr>
+        <tr><td>Where</td><td class="d">Same class</td><td class="d">Subclass</td></tr>
+        <tr><td>Params</td><td class="d"><strong>Different</strong> list</td><td class="d"><strong>Same</strong> list</td></tr>
+        <tr><td>Return</td><td class="d">Any (params decide)</td><td class="d">Same / covariant subtype</td></tr>
+        <tr><td>Bound</td><td class="d">Compile time</td><td class="d">Run time (dynamic)</td></tr>
+        <tr><td>Access</td><td class="d">Any</td><td class="d">Not more restrictive</td></tr>
+      </table></div>
+      <div class="exam"><span class="tag">Exam trap</span>Return type <em>alone</em> can't overload. Overriding: can't throw broader checked exceptions, can't reduce visibility, can't override <code class="tok">static</code>/<code class="tok">final</code>/<code class="tok">private</code>. Use <code class="tok">@Override</code> so the compiler checks you.</div>
+    </div></details>
+
+    <details class="card" id="c07" data-kw="polymorphism dynamic dispatch upcast downcast instanceof runtime virtual"><summary><span class="cname">07 · Polymorphism</span><span class="cpurpose">One reference type, many runtime forms.</span></summary><div class="cbody">
+      <pre><code>Animal a = new Dog("Rex");    // upcast: automatic &amp; safe
+a.eat();                       // runs Dog.eat() — decided at RUNTIME
+if (a instanceof Dog d) d.bark();   // safe downcast (pattern matching)</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Write one method/loop that works on any subtype (<code class="tok">Animal[] zoo</code>, <code class="tok">List&lt;Shape&gt;</code>), and add new subtypes later without changing that code. This is the backbone of clean OOP.</div>
+      <div class="warn"><span class="tag">Downcast</span>Superclass → subclass needs a cast and risks <code class="tok">ClassCastException</code>; guard with <code class="tok">instanceof</code>.</div>
+    </div></details>
+
+    <details class="card" id="c08" data-kw="object class tostring equals hashcode getclass root inherited"><summary><span class="cname">08 · The Object class</span><span class="cpurpose">Every class extends Object — these methods exist everywhere.</span></summary><div class="cbody">
+      <div class="tbl"><table>
+        <tr><th>Method</th><th class="d">Purpose / override for…</th></tr>
+        <tr><td><code>toString()</code></td><td class="d">Readable text form (printing, logging).</td></tr>
+        <tr><td><code>equals(Object)</code></td><td class="d">Logical equality (default = <code>==</code>).</td></tr>
+        <tr><td><code>hashCode()</code></td><td class="d">Hash for HashMap/HashSet.</td></tr>
+        <tr><td><code>getClass()</code></td><td class="d">The runtime type.</td></tr>
+      </table></div>
+      <div class="do"><span class="tag">What you can do</span>Override <code class="tok">toString()</code> for debugging, and <code class="tok">equals()</code>+<code class="tok">hashCode()</code> together so your objects work correctly as map keys / set elements (§17).</div>
+    </div></details>
+  </div>
+
+  <!-- ===== PART II ===== -->
+  <div class="part"><span class="part-label">Part II</span><h2>Advanced OOP</h2>
+
+    <details class="card" id="c09" data-kw="abstract class method cannot instantiate template"><summary><span class="cname">09 · Abstract classes</span><span class="cpurpose">A partial class that can't be instantiated.</span></summary><div class="cbody">
+      <pre><code>abstract class Shape {
+    abstract double area();                 // subclasses MUST implement
+    void describe(){ System.out.println(area()); }  // shared concrete code
+}
+class Circle extends Shape { double r; double area(){ return Math.PI*r*r; } }</code></pre>
+      <ul><li>Declared <code class="tok">abstract</code>; can't be <code class="tok">new</code>-ed. Mixes abstract + concrete methods, has fields &amp; constructors.</li></ul>
+      <div class="do"><span class="tag">What you can do</span>Provide a half-built base: shared state + shared methods, while forcing each subclass to fill in the specifics (the "template method" idea).</div>
+    </div></details>
+
+    <details class="card" id="c10" data-kw="interface implements default static private constant functional multiple"><summary><span class="cname">10 · Interfaces</span><span class="cpurpose">A contract of capabilities.</span></summary><div class="cbody">
+      <pre><code>interface Drawable {
+    int LAYERS = 3;                  // implicitly public static final
+    void draw();                     // implicitly public abstract
+    default void show(){ draw(); }   // Java 8+ body
+    static Drawable blank(){ return () -&gt; {}; }  // Java 8+ static
+}
+class Square implements Drawable { public void draw(){} }</code></pre>
+      <ul><li>Methods <code class="tok">public abstract</code> by default; fields are constants. A class can implement <strong>many</strong> interfaces.</li>
+      <li><strong>default</strong>/<strong>static</strong> methods (8), <strong>private</strong> methods (9). One abstract method = a <em>functional interface</em> (lambda target, §19).</li></ul>
+      <div class="do"><span class="tag">What you can do</span>Define a capability (Comparable, Runnable, EventHandler) that unrelated classes can all provide; achieve multiple "inheritance" of type; pass behaviour as lambdas.</div>
+    </div></details>
+
+    <details class="card" id="c11" data-kw="abstract class vs interface difference comparison when choose"><summary><span class="cname">11 · Abstract class vs interface</span><span class="cpurpose">The classic comparison.</span></summary><div class="cbody">
+      <div class="tbl"><table>
+        <tr><th></th><th>Abstract class</th><th>Interface</th></tr>
+        <tr><td>Join with</td><td class="d"><code>extends</code> (one)</td><td class="d"><code>implements</code> (many)</td></tr>
+        <tr><td>State/fields</td><td class="d">Any</td><td class="d">Constants only</td></tr>
+        <tr><td>Constructors</td><td class="d">Yes</td><td class="d">No</td></tr>
+        <tr><td>Bodies</td><td class="d">abstract + concrete</td><td class="d">abstract + default/static/private</td></tr>
+      </table></div>
+      <div class="note"><span class="tag">Pick</span>"A kind of X with shared data" → abstract class. "Can do X" (a capability many unrelated types share) → interface.</div>
+    </div></details>
+
+    <details class="card" id="c12" data-kw="composition inheritance has-a is-a delegation favor"><summary><span class="cname">12 · Composition vs inheritance</span><span class="cpurpose">HAS-A (hold an object) vs IS-A (extend a class).</span></summary><div class="cbody">
+      <pre><code>// Inheritance (IS-A): a Car IS-A Vehicle
+class Car extends Vehicle { }
+// Composition (HAS-A): a Car HAS-A Engine — usually more flexible
+class Car { private Engine engine = new Engine(); void start(){ engine.run(); } }</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Reuse behaviour by holding another object and delegating to it — avoids fragile deep class trees. <strong>Rule of thumb: favour composition over inheritance</strong> unless there's a true IS-A relationship.</div>
+    </div></details>
+
+    <details class="card" id="c13" data-kw="nested inner static local anonymous class listener"><summary><span class="cname">13 · Nested classes</span><span class="cpurpose">Classes inside classes.</span></summary><div class="cbody">
+      <div class="tbl"><table>
+        <tr><th>Type</th><th class="d">What</th></tr>
+        <tr><td>static nested</td><td class="d">No outer instance needed.</td></tr>
+        <tr><td>inner</td><td class="d">Tied to an outer instance; sees its fields.</td></tr>
+        <tr><td>local</td><td class="d">Inside a method.</td></tr>
+        <tr><td>anonymous</td><td class="d">One-off class + instance, often a listener/interface impl.</td></tr>
+      </table></div>
+      <pre><code>button.setOnAction(new EventHandler&lt;ActionEvent&gt;(){   // anonymous
+    public void handle(ActionEvent e){ save(); }
+});
+button.setOnAction(e -&gt; save());                       // lambda equivalent</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Bundle a helper class where it's used; implement listeners/handlers inline (anonymous class or lambda) without a separate file.</div>
+    </div></details>
+
+    <details class="card" id="c14" data-kw="enum constants values valueof ordinal fields methods switch singleton"><summary><span class="cname">14 · Enums</span><span class="cpurpose">A fixed set of named constants that can carry data.</span></summary><div class="cbody">
+      <pre><code>enum Planet {
+    EARTH(9.8), MARS(3.7);
+    private final double g;
+    Planet(double g){ this.g = g; }
+    double gravity(){ return g; }
+}
+for (Planet p : Planet.values()) {}      // iterate
+Planet x = Planet.valueOf("MARS");       // parse text</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Replace "magic" int/String constants with type-safe values; attach data + methods to each constant; use directly in <code class="tok">switch</code>; compare with <code class="tok">==</code> (each is a singleton).</div>
+    </div></details>
+
+    <details class="card" id="c15" data-kw="generics type parameter bounded wildcard extends super PECS erasure T E K V"><summary><span class="cname">15 · Generics</span><span class="cpurpose">Type parameters for compile-time type safety.</span></summary><div class="cbody">
+      <pre><code>class Box&lt;T&gt; { T v; void set(T x){ v=x; } T get(){ return v; } }
+&lt;T&gt; T first(List&lt;T&gt; l){ return l.get(0); }       // generic method
+class NumBox&lt;T extends Number&gt; {}                  // bounded
+void read(List&lt;? extends Number&gt; src){}            // producer (upper bound)
+void write(List&lt;? super Integer&gt; dst){}           // consumer (lower bound)</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Write one class/method that works for any type while keeping type safety (no casts). Bound types to restrict them; use wildcards to accept families of types. <strong>PECS</strong>: Producer Extends, Consumer Super.</div>
+      <div class="warn"><span class="tag">Erasure</span>Generic types are erased at runtime — no <code class="tok">new T()</code>, no <code class="tok">x instanceof List&lt;String&gt;</code>.</div>
+    </div></details>
+
+    <details class="card" id="c16" data-kw="record sealed immutable modern data carrier permits exhaustive"><summary><span class="cname">16 · Records &amp; sealed classes</span><span class="cpurpose">Concise immutable data + restricted hierarchies (modern Java).</span></summary><div class="cbody">
+      <pre><code>record Point(int x, int y) {}      // auto fields, ctor, getters, equals/hashCode/toString
+Point p = new Point(3,4);  int xv = p.x();   // accessor, no "get"
+
+sealed interface Shape permits Circle, Square {}
+final class Circle implements Shape {}
+final class Square implements Shape {}</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Use <strong>records</strong> for tidy immutable data (DTOs, map keys) with zero boilerplate. Use <strong>sealed</strong> to lock down who can extend a type, enabling exhaustive <code class="tok">switch</code> with no <code class="tok">default</code>.</div>
+    </div></details>
+
+    <details class="card" id="c17" data-kw="equals hashcode contract comparable comparator compareto sort ordering"><summary><span class="cname">17 · equals/hashCode &amp; ordering</span><span class="cpurpose">Equality and sorting — heavy exam material.</span></summary><div class="cbody">
+      <pre><code>@Override public boolean equals(Object o){
+    if (this==o) return true;
+    if (!(o instanceof Person p)) return false;
+    return age==p.age &amp;&amp; name.equals(p.name);
+}
+@Override public int hashCode(){ return Objects.hash(name, age); }
+
+class Person implements Comparable&lt;Person&gt; {           // ONE natural order
+    public int compareTo(Person o){ return Integer.compare(age, o.age); }
+}
+Comparator&lt;Person&gt; byName = Comparator.comparing(p -&gt; p.name);  // MANY orders
+list.sort(byName.thenComparing(p -&gt; p.age));</code></pre>
+      <div class="exam"><span class="tag">Contract</span>If two objects are <code class="tok">equals</code>, their <code class="tok">hashCode</code> <strong>must</strong> match. <code class="tok">equals</code> is reflexive/symmetric/transitive/consistent; <code class="tok">x.equals(null)</code>=false.</div>
+      <div class="do"><span class="tag">What you can do</span>Make objects usable as HashMap keys/HashSet items (override both); sort lists by a natural order (<code class="tok">Comparable</code>) or any custom/chained order (<code class="tok">Comparator</code>).</div>
+    </div></details>
+
+    <details class="card" id="c18" data-kw="immutable immutability string pool intern final defensive copy"><summary><span class="cname">18 · Immutability &amp; String</span><span class="cpurpose">Objects whose state never changes — safer &amp; simpler.</span></summary><div class="cbody">
+      <pre><code>final class Money {                 // immutable recipe
+    private final int cents;        // final fields
+    Money(int c){ cents = c; }      // set once
+    int cents(){ return cents; }    // no setters
+}
+String s = "hi";  s.concat("!");   // returns NEW string; s unchanged
+StringBuilder sb = new StringBuilder("hi"); sb.append("!");  // mutable, efficient</code></pre>
+      <ul><li><code class="tok">String</code> is immutable; literals are pooled (<code class="tok">"a"=="a"</code> true, but <code class="tok">new String("a")=="a"</code> false — use <code class="tok">.equals</code>).</li>
+      <li>Build strings in loops with <code class="tok">StringBuilder</code>, not <code class="tok">+</code>.</li></ul>
+      <div class="do"><span class="tag">What you can do</span>Make a class immutable (final class, final private fields, no setters, defensive copies) → free thread-safety, safe sharing, safe map keys.</div>
+    </div></details>
+
+    <details class="card" id="c19" data-kw="lambda functional interface method reference runnable supplier consumer event"><summary><span class="cname">19 · Lambdas &amp; functional interfaces</span><span class="cpurpose">Pass behaviour as a value — powers JavaFX events &amp; bindings.</span></summary><div class="cbody">
+      <pre><code>// a functional interface = exactly ONE abstract method
+Runnable r = () -&gt; System.out.println("go");
+Comparator&lt;String&gt; byLen = (a, b) -&gt; a.length() - b.length();
+button.setOnAction(e -&gt; save());           // EventHandler lambda
+
+// method references — shorthand for a lambda that just calls one method
+list.forEach(System.out::println);
+names.sort(String::compareToIgnoreCase);</code></pre>
+      <div class="tbl"><table>
+        <tr><th>Built-in interface</th><th class="d">Shape</th></tr>
+        <tr><td><code>Runnable</code></td><td class="d"><code>() -> void</code></td></tr>
+        <tr><td><code>Supplier&lt;T&gt;</code></td><td class="d"><code>() -> T</code></td></tr>
+        <tr><td><code>Consumer&lt;T&gt;</code></td><td class="d"><code>T -> void</code></td></tr>
+        <tr><td><code>Function&lt;T,R&gt;</code></td><td class="d"><code>T -> R</code></td></tr>
+        <tr><td><code>Predicate&lt;T&gt;</code></td><td class="d"><code>T -> boolean</code></td></tr>
+      </table></div>
+      <div class="do"><span class="tag">What you can do</span>Replace bulky anonymous classes with one line; pass functions to methods (event handlers, list filters, comparators); read JavaFX code (<code class="tok">e -&gt; ...</code> everywhere).</div>
+    </div></details>
+  </div>
+
+  <!-- ===== PART III ===== -->
+  <div class="part"><span class="part-label">Part III</span><h2>JavaFX Basics</h2>
+
+    <details class="card" id="c20" data-kw="javafx architecture application stage scene node hierarchy overview"><summary><span class="cname">20 · Architecture overview</span><span class="cpurpose">Application → Stage → Scene → Node tree.</span></summary><div class="cbody">
+      <pre><code>Stage        // the WINDOW
+  Scene      // the content inside one window
+    root     // a single root Node...
+      ...    // ...holding the whole UI tree (the "scene graph")</code></pre>
+      <ul><li>A Stage holds one Scene; a Scene holds one root Node; everything visible is a <code class="tok">Node</code>.</li>
+      <li>JavaFX since JDK 11 is a separate library (add <code class="tok">javafx-controls</code>, <code class="tok">javafx-fxml</code> via Maven).</li></ul>
+      <div class="do"><span class="tag">What you can do</span>Build any desktop UI by nesting nodes; swap the Scene's root to "navigate pages"; open extra Stages for dialogs (§26).</div>
+    </div></details>
+
+    <details class="card" id="c21" data-kw="application lifecycle init start stop launch thread main primary stage"><summary><span class="cname">21 · Application lifecycle</span><span class="cpurpose">init → start → stop, and the UI thread rule.</span></summary><div class="cbody">
+      <pre><code>public class App extends Application {
+    @Override public void init(){ /* bg thread, NO UI here */ }
+    @Override public void start(Stage stage){      // UI thread — build UI
+        stage.setScene(new Scene(new StackPane(new Label("Hi")), 400, 300));
+        stage.setTitle("Demo");  stage.show();
+    }
+    @Override public void stop(){ /* cleanup */ }
+    public static void main(String[] a){ launch(a); }
+}</code></pre>
+      <div class="exam"><span class="tag">Exam trap — two threads</span>Only the <strong>JavaFX Application Thread</strong> may touch live UI. <code class="tok">init()</code> runs on another thread (no UI there). For background work, hop back with <code class="tok">Platform.runLater(...)</code> (§46).</div>
+    </div></details>
+
+    <details class="card" id="c22" data-kw="scene graph node parent children getchildren common properties visible managed"><summary><span class="cname">22 · Scene graph &amp; Node</span><span class="cpurpose">Everything visible is a Node in a tree.</span></summary><div class="cbody">
+      <pre><code>VBox box = new VBox(10);
+box.getChildren().addAll(new Label("A"), new Button("B"));  // add children
+box.getChildren().remove(0);
+
+node.setVisible(false);   // hidden but KEEPS layout space
+node.setManaged(false);   // layout ignores it
+node.setDisable(true);    // greyed out, ignores input (cascades)
+node.getStyleClass().add("card");   node.setId("save");      // CSS hooks</code></pre>
+      <ul><li>One node has one parent — adding it elsewhere removes it from the old parent.</li>
+      <li>Controls (Button, etc.) manage their own children — use their content API, not <code class="tok">getChildren()</code>.</li></ul>
+      <div class="do"><span class="tag">What you can do</span>Add/remove/reorder children live (the pane re-lays-out automatically); show/hide, disable, style, move, rotate, scale, and fade any node via its universal properties.</div>
+    </div></details>
+
+    <details class="card" id="c23" data-kw="layout pane vbox hbox borderpane gridpane stackpane flowpane anchorpane grow"><summary><span class="cname">23 · Layout panes</span><span class="cpurpose">Pick the arrangement, then nest.</span></summary><div class="cbody">
+      <div class="tbl"><table>
+        <tr><th>Pane</th><th class="d">Arranges children</th></tr>
+        <tr><td><code>VBox</code> / <code>HBox</code></td><td class="d">Vertical column / horizontal row.</td></tr>
+        <tr><td><code>StackPane</code></td><td class="d">Layered, centred (overlay/badge).</td></tr>
+        <tr><td><code>BorderPane</code></td><td class="d">top/bottom/left/right/center — app shell.</td></tr>
+        <tr><td><code>GridPane</code></td><td class="d">Rows &amp; columns — forms.</td></tr>
+        <tr><td><code>FlowPane</code> / <code>TilePane</code></td><td class="d">Wrapping / equal tiles.</td></tr>
+        <tr><td><code>AnchorPane</code></td><td class="d">Pinned to edges.</td></tr>
+      </table></div>
+      <pre><code>VBox.setVgrow(node, Priority.ALWAYS);   // make a child fill extra space
+grid.add(new TextField(), 1, 0);        // GridPane: col, row</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Compose any layout by nesting panes (a BorderPane shell with VBox/HBox/GridPane inside); control spacing, padding, alignment, and which children grow.</div>
+    </div></details>
+
+    <details class="card" id="c24" data-kw="controls button label textfield combobox checkbox slider tableview listview overview"><summary><span class="cname">24 · Controls overview</span><span class="cpurpose">The interactive widgets (full list in the Node Catalog).</span></summary><div class="cbody">
+      <div class="tbl"><table>
+        <tr><th>Group</th><th class="d">Controls</th></tr>
+        <tr><td>Text</td><td class="d"><code>Label</code> <code>TextField</code> <code>PasswordField</code> <code>TextArea</code></td></tr>
+        <tr><td>Buttons</td><td class="d"><code>Button</code> <code>ToggleButton</code> <code>RadioButton</code> <code>CheckBox</code> <code>Hyperlink</code></td></tr>
+        <tr><td>Pickers</td><td class="d"><code>ComboBox</code> <code>ChoiceBox</code> <code>DatePicker</code> <code>ColorPicker</code> <code>Spinner</code> <code>Slider</code></td></tr>
+        <tr><td>Data</td><td class="d"><code>ListView</code> <code>TableView</code> <code>TreeView</code></td></tr>
+        <tr><td>Containers</td><td class="d"><code>ScrollPane</code> <code>SplitPane</code> <code>TabPane</code> <code>Accordion</code> <code>ToolBar</code></td></tr>
+        <tr><td>Menus</td><td class="d"><code>MenuBar</code> <code>Menu</code> <code>MenuItem</code> <code>ContextMenu</code></td></tr>
+      </table></div>
+      <pre><code>Button b = new Button("Save");  b.setOnAction(e -&gt; save());
+ComboBox&lt;String&gt; c = new ComboBox&lt;&gt;(); c.getItems().addAll("A","B");
+CheckBox cb = new CheckBox("Agree"); boolean on = cb.isSelected();</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Read a control's value (<code class="tok">getText</code>, <code class="tok">getValue</code>, <code class="tok">isSelected</code>), react to it via <code class="tok">setOnAction</code> or a property listener, and bind its state to other things (§43).</div>
+    </div></details>
+
+    <details class="card" id="c25" data-kw="fxml controller scene builder loader fx:id @FXML initialize separation"><summary><span class="cname">25 · FXML &amp; controllers</span><span class="cpurpose">Separate layout (FXML) from logic (controller).</span></summary><div class="cbody">
+      <pre><code>&lt;!-- view.fxml --&gt;
+&lt;VBox fx:controller="com.x.MyController" xmlns:fx="http://javafx.com/fxml"&gt;
+  &lt;Label fx:id="greeting"/&gt;
+  &lt;Button text="Hi" onAction="#onClick"/&gt;
+&lt;/VBox&gt;</code></pre>
+      <pre><code>public class MyController {
+    @FXML private Label greeting;            // matches fx:id
+    @FXML private void initialize(){ }       // runs after load
+    @FXML private void onClick(){ greeting.setText("Hi!"); }  // matches #onClick
+}
+Parent root = FXMLLoader.load(getClass().getResource("/view.fxml"));</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Design the UI visually in <strong>Scene Builder</strong> (writes FXML), keep Java logic in the controller, wire them with <code class="tok">fx:id</code> + <code class="tok">@FXML</code> + <code class="tok">onAction="#method"</code>. Loading throws <code class="tok">IOException</code> (§30).</div>
+    </div></details>
+
+    <details class="card" id="c26" data-kw="stage window dialog alert modality showandwait close oncloserequest secondary"><summary><span class="cname">26 · Stage windows &amp; dialogs</span><span class="cpurpose">The window itself + pop-ups.</span></summary><div class="cbody">
+      <pre><code>Stage dialog = new Stage();
+dialog.initOwner(primaryStage);
+dialog.initModality(Modality.APPLICATION_MODAL);   // BEFORE show()
+dialog.initStyle(StageStyle.UTILITY);
+dialog.setScene(new Scene(root, 300, 160));
+dialog.showAndWait();          // blocks until closed (not on primary stage)
+
+// quick built-in dialog
+new Alert(Alert.AlertType.CONFIRMATION, "Delete?")
+    .showAndWait().ifPresent(b -&gt; { if (b==ButtonType.OK) delete(); });
+
+primaryStage.setOnCloseRequest(e -&gt; { if (unsaved) e.consume(); });  // veto close</code></pre>
+      <div class="exam"><span class="tag">Exam trap</span><code class="tok">initStyle</code>/<code class="tok">initModality</code>/<code class="tok">initOwner</code> must be called <strong>before</strong> <code class="tok">show()</code>. <code class="tok">showAndWait()</code> can't be used on the primary stage.</div>
+      <div class="do"><span class="tag">What you can do</span>Open modal dialogs, set window title/size/icon, control resize, intercept the close button, and quit with <code class="tok">Platform.exit()</code>.</div>
+    </div></details>
+  </div>
+
+  <!-- ===== PART IV ===== -->
+  <div class="part"><span class="part-label">Part IV</span><h2>Exception Handling</h2>
+
+    <details class="card" id="c27" data-kw="exception hierarchy throwable error runtimeexception checked unchecked"><summary><span class="cname">27 · The exception hierarchy</span><span class="cpurpose">Throwable → Error / Exception → (un)checked.</span></summary><div class="cbody">
+      <pre><code>Throwable
+ ├── Error                  // serious JVM issues — don't catch
+ └── Exception
+      ├── RuntimeException   // UNCHECKED (NPE, ArithmeticException, ...)
+      └── (others)          // CHECKED — must catch or declare (IOException...)</code></pre>
+      <div class="tbl"><table>
+        <tr><th></th><th>Checked</th><th>Unchecked</th></tr>
+        <tr><td>Compiler forces?</td><td class="d">Yes</td><td class="d">No</td></tr>
+        <tr><td>Cause</td><td class="d">External / recoverable</td><td class="d">Programming bug</td></tr>
+        <tr><td>e.g.</td><td class="d"><code>IOException</code></td><td class="d"><code>NullPointerException</code></td></tr>
+      </table></div>
+    </div></details>
+
+    <details class="card" id="c28" data-kw="try catch finally multi-catch block order specific"><summary><span class="cname">28 · try / catch / finally</span><span class="cpurpose">Wrap risky code, handle, clean up.</span></summary><div class="cbody">
+      <pre><code>try {
+    int x = Integer.parseInt(text);
+} catch (NumberFormatException e) {            // specific first
+    System.out.println("Bad number: " + e.getMessage());
+} catch (IllegalStateException | ArithmeticException e) {  // multi-catch
+    log(e);
+} finally {
+    System.out.println("always runs");          // cleanup
+}</code></pre>
+      <ul><li>Most specific <code class="tok">catch</code> first. Multi-catch types can't be parent/child of each other.</li>
+      <li><code class="tok">finally</code> always runs (except <code class="tok">System.exit()</code>/crash); avoid <code class="tok">return</code> inside it (it overrides).</li></ul>
+      <div class="do"><span class="tag">What you can do</span>Recover from failures, give friendly messages, retry, and guarantee cleanup (close files, release locks) regardless of success or failure.</div>
+    </div></details>
+
+    <details class="card" id="c29" data-kw="throw throws custom exception extends cause chaining declare"><summary><span class="cname">29 · throw / throws &amp; custom exceptions</span><span class="cpurpose">Raise, declare, and define your own.</span></summary><div class="cbody">
+      <pre><code>void withdraw(double a) throws InsufficientFundsException {   // declare
+    if (a &gt; balance) throw new InsufficientFundsException("low");  // raise now
+}
+class InsufficientFundsException extends Exception {
+    InsufficientFundsException(String m){ super(m); }
+}
+try { lowLevel(); }
+catch (IOException e){ throw new ServiceException("failed", e); }  // chaining</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Signal a problem to the caller (<code class="tok">throw</code>), document it (<code class="tok">throws</code>), define meaningful domain exceptions, and wrap a low-level cause while keeping its stack trace (<code class="tok">getCause()</code>).</div>
+    </div></details>
+
+    <details class="card" id="c30" data-kw="try-with-resources autocloseable close automatic resource reverse"><summary><span class="cname">30 · try-with-resources</span><span class="cpurpose">Auto-close resources — no leaks.</span></summary><div class="cbody">
+      <pre><code>try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))) {
+    String line = br.readLine();
+} catch (IOException e) { e.printStackTrace(); }
+// br.close() called automatically, even on exception, before catch/finally</code></pre>
+      <ul><li>Resource must implement <code class="tok">AutoCloseable</code>; multiple are closed in <strong>reverse</strong> order.</li></ul>
+      <div class="do"><span class="tag">What you can do</span>Open files/streams/connections without ever forgetting to close them — replaces the error-prone manual <code class="tok">finally { x.close(); }</code>.</div>
+    </div></details>
+
+    <details class="card" id="c31" data-kw="common exceptions npe arrayindex classcast numberformat best practice rules"><summary><span class="cname">31 · Common exceptions &amp; rules</span><span class="cpurpose">The ones you'll be asked to identify.</span></summary><div class="cbody">
+      <div class="tbl"><table>
+        <tr><th>Exception</th><th class="d">When</th></tr>
+        <tr><td><code>NullPointerException</code></td><td class="d">Member access on <code>null</code>.</td></tr>
+        <tr><td><code>ArrayIndexOutOfBounds…</code></td><td class="d">Index &lt; 0 or ≥ length.</td></tr>
+        <tr><td><code>ArithmeticException</code></td><td class="d">Integer ÷ 0.</td></tr>
+        <tr><td><code>NumberFormatException</code></td><td class="d"><code>parseInt</code> on bad text.</td></tr>
+        <tr><td><code>ClassCastException</code></td><td class="d">Invalid downcast.</td></tr>
+        <tr><td><code>IOException</code></td><td class="d">I/O fails (checked).</td></tr>
+      </table></div>
+      <div class="note"><span class="tag">Best practice</span>Catch specific types; never swallow silently; don't use exceptions for normal flow; clean up with try-with-resources; include a clear message.</div>
+    </div></details>
+  </div>
+
+  <!-- ===== PART V ===== -->
+  <div class="part"><span class="part-label">Part V</span><h2>Text Input / Output</h2>
+
+    <details class="card" id="c32" data-kw="streams byte character reader writer inputstream outputstream overview decorator"><summary><span class="cname">32 · Streams overview</span><span class="cpurpose">Byte streams vs character streams.</span></summary><div class="cbody">
+      <div class="tbl"><table>
+        <tr><th></th><th>Byte</th><th>Character</th></tr>
+        <tr><td>For</td><td class="d">Binary (images)</td><td class="d">Text (encoding-aware)</td></tr>
+        <tr><td>Base</td><td class="d"><code>InputStream</code>/<code>OutputStream</code></td><td class="d"><code>Reader</code>/<code>Writer</code></td></tr>
+        <tr><td>File</td><td class="d"><code>FileInputStream</code></td><td class="d"><code>FileReader</code></td></tr>
+        <tr><td>Buffered</td><td class="d"><code>BufferedInputStream</code></td><td class="d"><code>BufferedReader</code></td></tr>
+      </table></div>
+      <div class="do"><span class="tag">What you can do</span>Wrap a raw stream in a buffered one for speed; bridge bytes→chars with <code class="tok">InputStreamReader</code>. For text work, use the character family + buffering.</div>
+    </div></details>
+
+    <details class="card" id="c33" data-kw="scanner console input system.in bufferedreader read keyboard nextint nextline"><summary><span class="cname">33 · Console input</span><span class="cpurpose">Scanner (easy) or BufferedReader (fast).</span></summary><div class="cbody">
+      <pre><code>Scanner sc = new Scanner(System.in);
+String name = sc.nextLine();  int age = sc.nextInt();
+
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+int n = Integer.parseInt(br.readLine());   // throws IOException</code></pre>
+      <div class="warn"><span class="tag">Gotcha</span><code class="tok">nextInt()</code> then <code class="tok">nextLine()</code> leaves the trailing newline — add an extra <code class="tok">nextLine()</code> to consume it.</div>
+      <div class="do"><span class="tag">What you can do</span>Read typed values with Scanner (<code class="tok">nextInt</code>, <code class="tok">nextDouble</code>, <code class="tok">hasNext</code>) or whole lines fast with <code class="tok">readLine()</code>.</div>
+    </div></details>
+
+    <details class="card" id="c34" data-kw="read file filereader bufferedreader readline files lines readalllines loop"><summary><span class="cname">34 · Reading files</span><span class="cpurpose">Line by line or all at once.</span></summary><div class="cbody">
+      <pre><code>try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))) {
+    String line;
+    while ((line = br.readLine()) != null) System.out.println(line);
+} catch (IOException e) { e.printStackTrace(); }
+
+List&lt;String&gt; all = Files.readAllLines(Path.of("data.txt"));   // modern</code></pre>
+      <div class="note"><span class="tag">The idiom</span><code class="tok">while ((line = br.readLine()) != null)</code> — <code class="tok">readLine()</code> returns <code class="tok">null</code> at end of file.</div>
+    </div></details>
+
+    <details class="card" id="c35" data-kw="write file filewriter bufferedwriter printwriter files.write append flush"><summary><span class="cname">35 · Writing files</span><span class="cpurpose">FileWriter / BufferedWriter / PrintWriter.</span></summary><div class="cbody">
+      <pre><code>try (PrintWriter pw = new PrintWriter(new FileWriter("out.txt"))) {
+    pw.println("Line 1");
+    pw.printf("Score: %d%n", 95);
+}
+new FileWriter("log.txt", true);            // append mode (2nd arg true)
+Files.write(Path.of("out.txt"), List.of("a","b"));   // modern one-liner</code></pre>
+      <div class="warn"><span class="tag">Remember</span>Writers buffer — data hits disk on <code class="tok">flush()</code>/<code class="tok">close()</code>. try-with-resources handles it.</div>
+      <div class="do"><span class="tag">What you can do</span>Save text with <code class="tok">println</code>/<code class="tok">printf</code>, append to logs, or write a whole list in one NIO call.</div>
+    </div></details>
+
+    <details class="card" id="c36" data-kw="nio path files modern exists copy delete createfile readstring writestring directory"><summary><span class="cname">36 · NIO.2 — Path &amp; Files</span><span class="cpurpose">The modern, cleaner file API.</span></summary><div class="cbody">
+      <pre><code>Path p = Path.of("docs", "data.txt");
+Files.exists(p); Files.createDirectories(Path.of("docs/sub"));
+Files.copy(src, dst); Files.delete(p); long size = Files.size(p);
+String text = Files.readString(p);  Files.writeString(p, "hi");   // Java 11+</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Check/create/copy/delete files &amp; folders, get size/attributes, and read/write whole text files in one line — far less boilerplate than old <code class="tok">File</code> + streams.</div>
+    </div></details>
+
+    <details class="card" id="c37" data-kw="serialization serializable objectoutputstream transient serialversionuid object save"><summary><span class="cname">37 · Serialization</span><span class="cpurpose">Save/restore whole objects as bytes.</span></summary><div class="cbody">
+      <pre><code>class User implements Serializable {        // marker interface
+    private static final long serialVersionUID = 1L;
+    String name;  transient String password;   // transient = NOT saved
+}
+try (ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream("u.ser"))){
+    o.writeObject(user);
+}
+try (ObjectInputStream i = new ObjectInputStream(new FileInputStream("u.ser"))){
+    User u = (User) i.readObject();          // throws IOException + ClassNotFoundException
+}</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Persist an object graph to disk and reload it later. Mark sensitive/derived fields <code class="tok">transient</code> to skip them; version with <code class="tok">serialVersionUID</code>.</div>
+    </div></details>
+  </div>
+
+  <!-- ===== PART VI ===== -->
+  <div class="part"><span class="part-label">Part VI</span><h2>JavaFX Events &amp; Binding</h2>
+
+    <details class="card" id="c38" data-kw="event types actionevent mouseevent keyevent scrollevent dragevent data"><summary><span class="cname">38 · Events &amp; event types</span><span class="cpurpose">An event object describes something that happened.</span></summary><div class="cbody">
+      <div class="tbl"><table>
+        <tr><th>Type</th><th class="d">Fires on / useful data</th></tr>
+        <tr><td><code>ActionEvent</code></td><td class="d">"Activated" — button, menu item, Enter in a field.</td></tr>
+        <tr><td><code>MouseEvent</code></td><td class="d"><code>getX/Y</code>, <code>getButton()</code>, <code>getClickCount()</code>, <code>isControlDown()</code>.</td></tr>
+        <tr><td><code>KeyEvent</code></td><td class="d"><code>getCode()</code> (KeyCode), <code>getText()</code>, modifier checks.</td></tr>
+        <tr><td><code>ScrollEvent</code></td><td class="d"><code>getDeltaY()</code> (wheel/zoom).</td></tr>
+        <tr><td><code>DragEvent</code></td><td class="d">Drag-and-drop data transfer.</td></tr>
+      </table></div>
+      <p>Every event also has <code class="tok">getSource()</code> (node the handler is on) and <code class="tok">getTarget()</code> (node actually hit).</p>
+    </div></details>
+
+    <details class="card" id="c39" data-kw="register handler setonaction addeventhandler addeventfilter eventhandler lambda remove"><summary><span class="cname">39 · Registering handlers</span><span class="cpurpose">Three ways to attach behaviour to events.</span></summary><div class="cbody">
+      <pre><code>// 1. convenience — ONE handler for the common case
+button.setOnAction(e -&gt; save());
+node.setOnMouseClicked(e -&gt; System.out.println(e.getX()));
+node.setOnKeyPressed(e -&gt; { if (e.getCode()==KeyCode.ENTER) go(); });
+
+// 2. addEventHandler — MANY, any event type
+node.addEventHandler(MouseEvent.MOUSE_ENTERED, e -&gt; highlight());
+
+// 3. addEventFilter — runs EARLY (capture), good for vetoing input
+node.addEventFilter(MouseEvent.MOUSE_PRESSED, e -&gt; { if (locked) e.consume(); });
+
+node.removeEventHandler(MouseEvent.MOUSE_ENTERED, ref);   // remove later</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Respond to clicks, keys, scroll, drag; attach several handlers to one node; intercept input before children see it (filter); reuse a named <code class="tok">EventHandler</code> across controls.</div>
+    </div></details>
+
+    <details class="card" id="c40" data-kw="propagation capture target bubble consume phase event travel parent child"><summary><span class="cname">40 · Propagation &amp; consume()</span><span class="cpurpose">How an event travels the node tree.</span></summary><div class="cbody">
+      <pre><code>Scene ─► VBox ─► Button     (1) CAPTURE — filters fire, root → target
+                 Button      (2) TARGET
+Scene ◄─ VBox ◄─ Button     (3) BUBBLE — handlers fire, target → root</code></pre>
+      <ul><li><strong>Filters</strong> run top-down (capture); <strong>handlers</strong> run bottom-up (bubble).</li>
+      <li><code class="tok">e.consume()</code> stops the event travelling further.</li></ul>
+      <div class="do"><span class="tag">What you can do</span>Let a parent intercept a click before a child (filter + consume), or stop a child's click from reaching ancestors (handler + consume). Mental model: <em>filter = intercept in, handler = react out, consume = stop here.</em></div>
+    </div></details>
+
+    <details class="card" id="c41" data-kw="handler reference table which node setonaction onedit onselectionchanged universal"><summary><span class="cname">41 · Which handler on which node</span><span class="cpurpose">Quick reference.</span></summary><div class="cbody">
+      <div class="tbl"><table>
+        <tr><th>Handler</th><th class="d">Available on</th></tr>
+        <tr><td>mouse/key/scroll/drag</td><td class="d"><strong>Any Node</strong> (<code>setOnMouseClicked</code>, <code>setOnKeyPressed</code>, …)</td></tr>
+        <tr><td><code>setOnAction</code></td><td class="d">Button, RadioButton, Hyperlink, MenuItem, SplitMenuButton, TextField, ComboBox, ColorPicker, DatePicker</td></tr>
+        <tr><td><code>setOnShowing/Hidden/…</code></td><td class="d">ComboBox/ColorPicker/DatePicker, Menu, ContextMenu, Window/Stage</td></tr>
+        <tr><td><code>setOnEditCommit</code></td><td class="d">ListView, TableColumn, TreeView (editable cells)</td></tr>
+        <tr><td>property listeners</td><td class="d">value changes: <code>selectedProperty</code>, <code>valueProperty</code>, <code>textProperty</code>, <code>selectedItemProperty</code></td></tr>
+      </table></div>
+      <div class="note"><span class="tag">Choose</span>Single action (button/Enter) → <code class="tok">setOnAction</code>. Value changed (slider/checkbox/selection) → property listener. Low-level input on any node → mouse/key handlers.</div>
+    </div></details>
+
+    <details class="card" id="c42" data-kw="property observable simpleproperty changelistener invalidationlistener get set valueProperty"><summary><span class="cname">42 · Properties &amp; listeners</span><span class="cpurpose">Observable values — the engine behind binding.</span></summary><div class="cbody">
+      <pre><code>IntegerProperty count = new SimpleIntegerProperty(0);
+count.set(5);  int c = count.get();
+
+// ChangeListener — old + new value (the common one)
+slider.valueProperty().addListener((obs, oldV, newV) -&gt; setVol(newV));
+// InvalidationListener — fires when value goes stale; cheaper, no values
+count.addListener(obs -&gt; markDirty());</code></pre>
+      <p>Types: <code class="tok">StringProperty</code>, <code class="tok">IntegerProperty</code>, <code class="tok">DoubleProperty</code>, <code class="tok">BooleanProperty</code>, <code class="tok">ObjectProperty&lt;T&gt;</code>, <code class="tok">ListProperty&lt;T&gt;</code>. Every control exposes them: <code class="tok">textProperty()</code>, <code class="tok">valueProperty()</code>, <code class="tok">selectedProperty()</code>, <code class="tok">disableProperty()</code>…</p>
+      <div class="do"><span class="tag">What you can do</span>Watch any UI value and run code when it changes (listener), or wire values together so they update automatically (binding, next). Naming: <code class="tok">xProperty()</code> = the property; <code class="tok">getX()/setX()</code> = the value.</div>
+    </div></details>
+
+    <details class="card" id="c43" data-kw="binding bind bidirectional unbind fluent multiply add isEmpty asString greaterThan and or not disable mirror sync total"><summary><span class="cname">43 · Binding — the full toolkit</span><span class="cpurpose">Make one value follow others automatically. Each operation + what you can do with it.</span></summary><div class="cbody">
+      <h3>The two core methods</h3>
+      <pre><code>label.textProperty().bind(slider.valueProperty().asString("%.0f"));
+//  ^ one-way: label ALWAYS mirrors slider. Calling label.setText() now THROWS.
+
+fieldA.textProperty().bindBidirectional(fieldB.textProperty());
+//  ^ two-way: edit either, both match.
+
+prop.unbind();        prop.isBound();   // release / check</code></pre>
+
+      <h3>Numeric fluent operators — build computed numbers</h3>
+      <pre><code>NumberBinding total = price.multiply(qty);            // price * qty
+NumberBinding net   = total.subtract(discount).add(tax);
+DoubleBinding half  = value.divide(2).negate();
+NumberBinding cap   = score.add(bonus); // chain freely</code></pre>
+      <div class="do"><span class="tag">Do</span><code class="tok">add</code> <code class="tok">subtract</code> <code class="tok">multiply</code> <code class="tok">divide</code> <code class="tok">negate</code> → live totals, prices, running sums. Result recomputes whenever any input changes.</div>
+
+      <h3>Comparisons → boolean bindings</h3>
+      <pre><code>BooleanBinding tooLow  = balance.lessThan(0);
+BooleanBinding passed  = score.greaterThanOrEqualTo(50);
+BooleanBinding exact   = qty.isEqualTo(target);</code></pre>
+      <div class="do"><span class="tag">Do</span><code class="tok">greaterThan</code> <code class="tok">lessThan</code> <code class="tok">greaterThanOrEqualTo</code> <code class="tok">isEqualTo</code> <code class="tok">isNotEqualTo</code> → turn numbers into true/false you can feed to <code class="tok">visibleProperty</code>, <code class="tok">disableProperty</code>, styling.</div>
+
+      <h3>Boolean logic — combine conditions</h3>
+      <pre><code>saveBtn.disableProperty().bind(nameField.textProperty().isEmpty());
+loginBtn.disableProperty().bind(
+        userField.textProperty().isEmpty()
+        .or(passField.textProperty().isEmpty()));
+errorIcon.visibleProperty().bind(valid.not());</code></pre>
+      <div class="do"><span class="tag">Do</span><code class="tok">and</code> <code class="tok">or</code> <code class="tok">not</code> <code class="tok">isEqualTo</code> → enable/disable buttons, show/hide nodes based on several conditions at once. <em>This is the most common real use of binding.</em></div>
+
+      <h3>String operators — build &amp; validate text</h3>
+      <pre><code>StringExpression full   = first.concat(" ").concat(last);
+StringExpression label  = count.asString("Total: %d items");
+BooleanBinding   empty  = name.isEmpty();      // also isNotEmpty()
+IntegerBinding   len    = comment.length();</code></pre>
+      <div class="do"><span class="tag">Do</span><code class="tok">concat</code> <code class="tok">asString(fmt)</code> <code class="tok">isEmpty</code> <code class="tok">isNotEmpty</code> <code class="tok">length</code> <code class="tok">isEqualTo</code> → live labels ("3 items"), full-name fields, character counters, "field required" checks.</div>
+
+      <h3>Object &amp; null checks</h3>
+      <pre><code>detailPane.visibleProperty().bind(selectedItem.isNotNull());
+BooleanBinding same = chosen.isEqualTo(defaultValue);</code></pre>
+      <div class="do"><span class="tag">Do</span><code class="tok">isNull</code> <code class="tok">isNotNull</code> <code class="tok">isEqualTo</code> <code class="tok">asString</code> → show a detail panel only when something is selected, etc.</div>
+
+      <div class="warn"><span class="tag">Pitfalls</span>Can't <code class="tok">set()</code> a bound property (throws) — <code class="tok">unbind()</code> first. Bidirectional needs matching property types. Bind to <em>mirror</em> a value; use a <em>listener</em> when you need to <em>do</em> something.</div>
+    </div></details>
+
+    <details class="card" id="c44" data-kw="bindings class when then otherwise size isEmpty format concat select createbinding bindcontent min max"><summary><span class="cname">44 · The Bindings utility class</span><span class="cpurpose">Helpers for logic that the fluent style can't express.</span></summary><div class="cbody">
+      <h3>Reactive if/else</h3>
+      <pre><code>status.textProperty().bind(
+    Bindings.when(loggedIn).then("Welcome").otherwise("Please log in"));
+node.styleProperty().bind(
+    Bindings.when(error).then("-fx-border-color:red").otherwise(""));</code></pre>
+      <div class="do"><span class="tag">Do</span><code class="tok">when(cond).then(x).otherwise(y)</code> → pick one of two values reactively (text, style, size, color).</div>
+
+      <h3>Collection bindings</h3>
+      <pre><code>countLabel.textProperty().bind(Bindings.size(items).asString("%d items"));
+emptyMsg.visibleProperty().bind(Bindings.isEmpty(items));
+first.textProperty().bind(Bindings.valueAt(items, 0).asString());</code></pre>
+      <div class="do"><span class="tag">Do</span><code class="tok">size</code> <code class="tok">isEmpty</code> <code class="tok">valueAt</code> → "X items" labels, "list is empty" placeholders, show a value at an index — all auto-updating.</div>
+
+      <h3>Compose strings / reach into nested props</h3>
+      <pre><code>title.bind(Bindings.format("%s (%d unread)", name, unreadCount));
+city.bind(Bindings.select(person, "address", "city"));   // person.address.city</code></pre>
+      <div class="do"><span class="tag">Do</span><code class="tok">format</code> <code class="tok">concat</code> → build a string from several values; <code class="tok">select</code> → bind through a chain of properties safely (null-aware).</div>
+
+      <h3>Arbitrary computed value</h3>
+      <pre><code>StringBinding summary = Bindings.createStringBinding(
+        () -&gt; items.size() + " items, " + selected.size() + " selected",
+        items, selected);          // &lt;-- list every dependency
+status.textProperty().bind(summary);</code></pre>
+      <div class="do"><span class="tag">Do</span><code class="tok">createStringBinding</code> / <code class="tok">createBooleanBinding</code> / <code class="tok">createObjectBinding</code> → any custom logic, recomputed when the listed dependencies change.</div>
+
+      <h3>Mirror list contents</h3>
+      <pre><code>Bindings.bindContent(targetList, sourceList);   // target follows source</code></pre>
+      <div class="warn"><span class="tag">Remember</span>In <code class="tok">createXxxBinding</code> and custom bindings you <strong>must</strong> pass every dependency, or the value won't refresh.</div>
+    </div></details>
+
+    <details class="card" id="c45" data-kw="observable collections observablelist fxcollections listchangelistener filteredlist sortedlist live"><summary><span class="cname">45 · Observable collections</span><span class="cpurpose">Lists that notify the UI when they change.</span></summary><div class="cbody">
+      <pre><code>ObservableList&lt;String&gt; items = FXCollections.observableArrayList();
+ListView&lt;String&gt; view = new ListView&lt;&gt;(items);
+items.add("hello");      // ListView updates instantly
+items.setAll(newData);   // replace all at once
+
+// live search box over a list
+FilteredList&lt;String&gt; filtered = new FilteredList&lt;&gt;(items, s -&gt; true);
+search.textProperty().addListener((o, was, q) -&gt;
+        filtered.setPredicate(s -&gt; s.toLowerCase().contains(q.toLowerCase())));
+view.setItems(filtered);</code></pre>
+      <div class="do"><span class="tag">What you can do</span>Bind a ListView/TableView/ComboBox to a list once, then just mutate the list — the UI follows. Wrap in <code class="tok">FilteredList</code>/<code class="tok">SortedList</code> for live search &amp; sorting that updates as data changes.</div>
+    </div></details>
+
+    <details class="card" id="c46" data-kw="concurrency task service platform runlater background thread onsucceeded onfailed progress"><summary><span class="cname">46 · Concurrency — Task &amp; Platform.runLater</span><span class="cpurpose">Run slow work off the UI thread without freezing.</span></summary><div class="cbody">
+      <pre><code>Task&lt;String&gt; load = new Task&lt;&gt;() {
+    @Override protected String call() throws Exception {
+        return backend.fetch();        // slow work — safe here (background)
+    }
+};
+progressBar.progressProperty().bind(load.progressProperty());
+load.setOnSucceeded(e -&gt; area.setText(load.getValue()));    // on UI thread
+load.setOnFailed(e -&gt; showError(load.getException()));       // catches exceptions
+new Thread(load).start();
+
+// quick hop back to the UI thread from any background code:
+Platform.runLater(() -&gt; label.setText("done"));</code></pre>
+      <div class="exam"><span class="tag">Exam trap</span>Never touch UI from a background thread. Use a <code class="tok">Task</code> (bind <code class="tok">progressProperty</code>/<code class="tok">messageProperty</code>, read result in <code class="tok">setOnSucceeded</code>, errors in <code class="tok">setOnFailed</code>) or <code class="tok">Platform.runLater</code>.</div>
+      <div class="do"><span class="tag">What you can do</span>Load files / call a server / compute without freezing the window; show progress; handle success and failure cleanly on the UI thread.</div>
+    </div></details>
+  </div>
+
+  <footer>
+    <span>Java SE + JavaFX 21 · Complete exam master — OOP · JavaFX · Exceptions · I/O · Events · Binding</span>
+    <span>Search · expand only what you're revising</span>
+  </footer>
+</div>
+
+<button class="toTop" id="toTop" aria-label="Back to top">↑</button>
+
+<script>
+(function(){
+  var KEYWORDS=new Set(("abstract assert boolean break byte case catch char class const continue default do double else enum extends final finally float for goto if implements import instanceof int interface long native new package private protected public return short static strictfp super switch synchronized this throw throws transient try var void volatile while true false null record sealed permits yield").split(" "));
+  function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  var TOKEN=/(\/\/[^\n]*)|(\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\])*")|('(?:\\.|[^'\\])*')|(@[A-Za-z_]\w*)|(\b\d[\d_]*(?:\.\d[\d_]*)?[fFdDlL]?\b)|([A-Za-z_$][\w$]*)/g;
+  function hl(src){var out="",last=0,m;TOKEN.lastIndex=0;
+    while((m=TOKEN.exec(src))!==null){
+      if(m.index>last)out+=esc(src.slice(last,m.index));
+      if(m[1]||m[2])out+='<span class="tok-comment">'+esc(m[0])+'</span>';
+      else if(m[3]||m[4])out+='<span class="tok-str">'+esc(m[0])+'</span>';
+      else if(m[5])out+='<span class="tok-anno">'+esc(m[0])+'</span>';
+      else if(m[6])out+='<span class="tok-num">'+esc(m[0])+'</span>';
+      else if(m[7]){var w=m[7];
+        if(KEYWORDS.has(w))out+='<span class="tok-key">'+esc(w)+'</span>';
+        else if(/^[A-Z]/.test(w))out+='<span class="tok-type">'+esc(w)+'</span>';
+        else out+=esc(w);}
+      last=m.index+m[0].length;}
+    if(last<src.length)out+=esc(src.slice(last));return out;}
+  document.querySelectorAll("pre > code").forEach(function(c){try{c.innerHTML=hl(c.textContent);}catch(e){}});
+
+  var cards=Array.prototype.slice.call(document.querySelectorAll("details.card"));
+  document.getElementById("expandAll").onclick=function(){cards.forEach(function(d){if(!d.classList.contains("hidden"))d.open=true;});};
+  document.getElementById("collapseAll").onclick=function(){cards.forEach(function(d){d.open=false;});};
+
+  var search=document.getElementById("search"),count=document.getElementById("count");
+  var parts=Array.prototype.slice.call(document.querySelectorAll(".part"));
+  function updateCount(){count.textContent=cards.filter(function(d){return !d.classList.contains("hidden");}).length+" / "+cards.length+" topics";}
+  search.addEventListener("input",function(){
+    var q=search.value.trim().toLowerCase();
+    cards.forEach(function(d){
+      var hay=(d.querySelector("summary").textContent+" "+(d.dataset.kw||"")).toLowerCase();
+      var hit=q===""||hay.indexOf(q)!==-1;
+      d.classList.toggle("hidden",!hit); d.open=q!==""&&hit;
+    });
+    parts.forEach(function(s){
+      var sc=s.querySelectorAll("details.card");
+      var any=Array.prototype.some.call(sc,function(d){return !d.classList.contains("hidden");});
+      s.classList.toggle("hidden",!any);
+    });
+    updateCount();
+  });
+  updateCount();
+
+  document.querySelectorAll("nav.toc a").forEach(function(a){
+    a.addEventListener("click",function(){var t=document.querySelector(a.getAttribute("href"));if(t&&t.tagName==="DETAILS")t.open=true;});
+  });
+
+  var links=Array.prototype.slice.call(document.querySelectorAll("nav.toc a"));
+  var targs=links.map(function(a){return document.querySelector(a.getAttribute("href"));});
+  function onScroll(){var pos=window.scrollY+150,cur=0;
+    for(var i=0;i<targs.length;i++){if(targs[i]&&!targs[i].classList.contains("hidden")&&targs[i].offsetTop<=pos)cur=i;}
+    links.forEach(function(a,i){a.classList.toggle("active",i===cur);});
+    document.getElementById("toTop").classList.toggle("show",window.scrollY>600);}
+  window.addEventListener("scroll",onScroll,{passive:true});onScroll();
+  document.getElementById("toTop").onclick=function(){window.scrollTo({top:0,behavior:"smooth"});};
+})();
+</script>
+</body>
+</html>
